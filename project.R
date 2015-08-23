@@ -13,7 +13,7 @@ features <- clData[featuresnames]
 xdata <- createDataPartition(y=features$classe, p=3/4, list=FALSE )
 training <- features[xdata,]
 testing <- features[-xdata,]
-model <- foreach(ntree=rep(150, 4), .combine=randomForest::combine) randomForest(training[-ncol(training)], training$classe, ntree=ntree)
+model <- foreach(ntree=rep(150, 4), .combine=randomForest::combine) %dopar% randomForest(training[-ncol(training)], training$classe, ntree=ntree)
 predictionsTr <- predict(model, newdata=training)
 confusionMatrix(predictionsTr,training$classe)
 predictionsTe <- predict(model, newdata=testing)
